@@ -2,6 +2,7 @@ import { Component } from "react";
 import { HashRouter, Routes, Route, NavLink } from "react-router-dom";
 import TodoList from "./components/todoList/TodoList";
 import TodoAdd from "./components/todoAdd/TodoAdd";
+import Panel from "./components/panel/Panel";
 
 const date1 = new Date(2021, 7, 19, 14, 5);
 const date2 = new Date(2021, 7, 19, 15, 23);
@@ -52,11 +53,12 @@ export default class App extends Component {
       <HashRouter>
         <nav className="navbar is-light">
           <div className="navbar-brand">
-            <NavLink 
+            <NavLink
               to="/"
-              className={({ isActive }) => 
-                'navbar-item is-uppercasee' + 
-                (isActive ? ' is-active' : '')} >
+              className={({ isActive }) =>
+                "navbar-item is-uppercasee" + (isActive ? " is-active" : "")
+              }
+            >
               Todos
             </NavLink>
           </div>
@@ -64,9 +66,11 @@ export default class App extends Component {
             <div className="navbar-start">
               <NavLink
                 to="/add"
-                className={({ isActive }) => 
-                  'navbar-item' + (isActive ? ' is-active' : '')}>
-                  Создать дело
+                className={({ isActive }) =>
+                  "navbar-item" + (isActive ? " is-active" : "")
+                }
+              >
+                Создать дело
               </NavLink>
             </div>
           </div>
@@ -76,11 +80,18 @@ export default class App extends Component {
             <Route
               path="/"
               element={
-                <TodoList
-                  list={this.state.data}
-                  setDone={this.setDone}
-                  delete={this.delete}
-                ></TodoList>
+                <>
+                  <TodoList
+                    list={this.state.data}
+                    setDone={this.setDone}
+                    delete={this.delete}
+                  ></TodoList>
+                  <Panel title="Panel 1">
+                    <Panel title="Panel 2">
+                      <Panel title="Panel 3" />
+                    </Panel>
+                  </Panel>
+                </>
               }
             />
             <Route path="/add" element={<TodoAdd add={this.add} />} />
