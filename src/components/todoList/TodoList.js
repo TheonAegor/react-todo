@@ -4,8 +4,9 @@ import { setDone, deleteTodo } from "../../actionCreators";
 import { selectList } from "../../selectors";
 import { useEffect } from "react";
 import { useState } from "react";
+import { connect } from "react-redux";
 
-export default function TodoList(props) {
+function TodoListUnconnected(props) {
   const data = selectList(store.getState());
   const [,setFlag] =  useState(false)
 
@@ -22,7 +23,7 @@ export default function TodoList(props) {
       <h1>Дела</h1>
       <table className="table is-hoverable is-fullwidth">
         <tbody>
-          {data.map((item) => (
+          {props.list.map((item) => (
             <tr key={item.key}>
               <td>
                 {item.done && <del>{item.title}</del>}
@@ -33,7 +34,7 @@ export default function TodoList(props) {
                   className="button is-success"
                   title="Пометить как сделанное"
                   disabled={item.done}
-                  onClick={() => setDone(item.key)}
+                  onClick={() => props.setDone(item.key)}
                 >
                   &#9745;
                 </button>
@@ -42,7 +43,7 @@ export default function TodoList(props) {
                 <button
                   className="button is-danger"
                   title="Удалить"
-                  onClick={() => deleteTodo(item.key)}
+                  onClick={() => props.delete(item.key)}
                 >
                   &#9746;
                 </button>
@@ -54,3 +55,13 @@ export default function TodoList(props) {
     </section>
   );
 }
+
+const actionBroker = (dispatch) => ({
+	setDone: (key) => {dispatch({ type: 'todos/setDone', payload: key})},
+	delete: (key) => {dispatch({ type: 'todos/delete', payload: key})}
+});
+
+const dataReceiver = (state) => ({list: state.data})
+const connectTodoList = connect(dataReceiver, actionBroker)
+const TodoList = connectTodoList(TodoListUnconnected)
+export default TodoList;
